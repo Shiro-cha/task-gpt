@@ -1,9 +1,13 @@
+import type { ExecutionLog } from "../models/ExecutionLog";
+
 export class FeedbackFacade {
-    feedback: string;
-    constructor(feedback: string) {
-        this.feedback = feedback;
+
+    log: ExecutionLog;
+    constructor(log:ExecutionLog) {
+    
+        this.log = log;
     }
     getFeedback(): string {
-        return this.feedback;
+        return this.log.feedback;
     }
 }
