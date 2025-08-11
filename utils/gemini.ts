@@ -19,7 +19,7 @@ export const generateContentWithGemini = async (
 Given a user message, translate it into a JSON command object in this exact format:
 
 {
-  "command_name": "string",
+  "command_name": "string", // ex: Find  .txt files in directory
   "task": [] // the linux command so sequence of commands to executes (e.g. ["ls -l", "cd /home/user", "cat file.txt"])
 }
 
