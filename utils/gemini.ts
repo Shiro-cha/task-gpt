@@ -1,5 +1,10 @@
 
 
+export function cleanJson(s: string) {
+  s = s.replace(/```(\w+)?/g, "").trim()
+  const m = s.match(/\{[\s\S]*\}/)
+  return m ? m[0] : s
+}
 
 
 export const generateContentWithGemini = async (
@@ -71,5 +76,6 @@ User input: "${message}"
 
   //console.log(response);
   const data = await response.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || message;
+  const cleanedResponse = cleanJson(data.candidates?.[0]?.content?.parts?.[0]?.text || "");
+  return cleanedResponse|| message;
 };
