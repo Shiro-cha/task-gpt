@@ -31,7 +31,7 @@ const executorFacade = new ExecutorFacade(command);
 console.log(executorFacade.executeCommand());
 
 // test gemini
-generateContentWithGemini("How is your girlfriend? Is she happy?")
+generateContentWithGemini("Go to my project folder (find where it is) and run the latest project I did called task-gpt")
   .then((response) => {
     console.log("Gemini response:", response);
   })
