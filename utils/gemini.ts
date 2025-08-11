@@ -1,4 +1,4 @@
-import fetch from "node-fetch";  // si tu es en Node.js
+
 
 
 
@@ -65,7 +65,3 @@ User message: "<USER_MESSAGE>"
   const data = await response.json();
   return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || message;
 };
-
-function fetch(arg0: string, arg1: { method: string; headers: { "Content-Type": string; }; body: string; }) {
-    throw new Error("Function not implemented.");
-}
