@@ -31,7 +31,7 @@ const executorFacade = new ExecutorFacade(command);
 console.log(executorFacade.executeCommand());
 
 // test gemini
-generateContentWithGemini("Translate this message into a JSON command object")
+generateContentWithGemini("trouver tous les fichier .txt dans le dossier courant")
   .then((response) => {
     console.log("Gemini response:", response);
   })
