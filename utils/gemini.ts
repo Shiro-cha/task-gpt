@@ -20,9 +20,7 @@ Given a user message, translate it into a JSON command object in this exact form
 
 {
   "command_name": "string",
-  "parameters": {
-    // parameter keys and values
-  }
+  "task": [] // the linux command so sequence of commands to executes (e.g. ["ls -l", "cd /home/user", "cat file.txt"])
 }
 
 **Important: Return ONLY the JSON object. Do NOT add any explanation, text, or formatting.**
