@@ -14,7 +14,7 @@ console.log("GEMINI_API_KEY =", Bun.env.API_KEY_GEMINI);
 // Charge les variables du fichier .env dans process.env
 
 
-const message = new Message("1", "Hello, how are you?", new Date(), new User("1", "John Doe", "YV7Gj@example.com", new Date()));
+const message = new Message("1", "Hello, please show all connected users", new Date(), new User("1", "John Doe", "YV7Gj@example.com", new Date()));
 const messageFacade = new MessageFacade(message);
 const geminiResponse = await messageFacade.sendMessage();
  if(GeminiResponseValidator.isCommand(geminiResponse)){
