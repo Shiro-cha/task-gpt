@@ -12,7 +12,7 @@ import { GeminiResponseValidator } from './utils/GeminiResponseValidator';
 
 
 
-const message = new Message("1", "Hello, please show all connected users", new Date(), new User("1", "John Doe", "YV7Gj@example.com", new Date()));
+const message = new Message("1", "using firefox cli to open it and go to Shiro-cha github", new Date(), new User("1", "John Doe", "YV7Gj@example.com", new Date()));
 const messageFacade = new MessageFacade(message);
 const geminiResponse = await messageFacade.sendMessage();
 console.log("GEMINI RESPONSE:", geminiResponse);
