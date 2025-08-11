@@ -26,7 +26,7 @@ Be creative with responses (different formats and words each time), sometimes a 
 
 When the user DOES request commands, respond ONLY with a JSON in this exact format :
 {
-  "command_name": "string",
+  "command_name": "string",//descriptive name with space
   "task": [ "command1", "command2", ... ]
 }
 
