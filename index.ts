@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-dotenv.config()
+
 import { MessageFacade } from "./application/MessageFacade";
 import { FeedbackFacade } from "./application/FeedbackFacade";
 import { ExecutorFacade } from "./application/ExecutorFacade";
@@ -9,8 +9,8 @@ import { User } from "./models/User";
 import { Command } from "./models/Command";
 import { ExecutionLog } from "./models/ExecutionLog";
 
-
-
+dotenv.config()
+console.log("GEMINI_API_KEY =", process.env.GEMINI_API_KEY);
 // Charge les variables du fichier .env dans process.env
 
 
