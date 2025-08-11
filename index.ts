@@ -1,6 +1,7 @@
 import { MessageFacade } from "./application/MessageFacade";
 import { FeedbackFacade } from "./application/FeedbackFacade";
 import { ExecutorFacade } from "./application/ExecutorFacade";
+import { generateContentWithGemini } from "./utils/gemini";
 import { Message } from "./models/Message";
 import { User } from "./models/User";
 import { Command } from "./models/Command";
@@ -21,3 +22,15 @@ console.log(feedbackFacade.getFeedback());
 const command = new Command("This is a list command", message, "ls -l", new Date(), "Pending");
 const executorFacade = new ExecutorFacade(command);
 console.log(executorFacade.executeCommand());
+
+// test gemini
+generateContentWithGemini("Translate this message into a JSON command object")
+  .then((response) => {
+    console.log("Gemini response:", response);
+  })
+  .catch((error) => {
+    console.error("Error generating content with Gemini:", error);
+  })
+  .finally(() => {
+    console.log("Gemini content generation completed.");
+  } );
