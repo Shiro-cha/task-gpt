@@ -4,7 +4,7 @@ export class ExecutorFacade {
 	constructor(private readonly command: Command) {}
 
 	async executeCommand() {
-        // run the command using Bun's subprocess capabilities
+        
         if (!this.command || !this.command.task) {
             throw new Error("No command provided");
         }

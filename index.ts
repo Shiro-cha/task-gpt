@@ -12,15 +12,16 @@ import { GeminiResponseValidator } from './utils/GeminiResponseValidator';
 
 
 
-const message = new Message("1", "using firefox cli to open it and go to Shiro-cha github", new Date(), new User("1", "John Doe", "YV7Gj@example.com", new Date()));
+const message = new Message("1", "Hello Gemini", new Date(), new User("1", "John Doe", "YV7Gj@example.com", new Date()));
 const messageFacade = new MessageFacade(message);
 const geminiResponse = await messageFacade.sendMessage();
-console.log("GEMINI RESPONSE:", geminiResponse);
  if(GeminiResponseValidator.isCommand(geminiResponse)){
     const repsonseJson = JSON.parse(geminiResponse);
     const command = new Command(repsonseJson.command_name, repsonseJson.task.join(" && "), new Date(), "Pending");
     const executorFacade = new ExecutorFacade(command);
     executorFacade.executeCommand()
+}else{
+    console.log("RESPONSE IS NOT A COMMAND:", geminiResponse);
 }
 
 const feedback = "This is a great message!";
