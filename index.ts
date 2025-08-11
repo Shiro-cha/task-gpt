@@ -7,6 +7,11 @@ import { User } from "./models/User";
 import { Command } from "./models/Command";
 import { ExecutionLog } from "./models/ExecutionLog";
 
+import dotenv from 'dotenv'
+
+// Charge les variables du fichier .env dans process.env
+dotenv.config()
+
 const message = new Message("1", "Hello, how are you?", new Date(), new User("1", "John Doe", "YV7Gj@example.com", new Date()));
 const messageFacade = new MessageFacade(message);
 

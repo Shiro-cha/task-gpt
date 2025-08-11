@@ -1,10 +1,6 @@
 
-import dotenv from 'dotenv'
 
-// Charge les variables du fichier .env dans process.env
-dotenv.config()
-
-console.log(process.env.PORT)          // Affiche 3000
+         // Affiche 3000
 console.log(process.env.API_KEY_GEMINI) // Affiche ta clé API
 
 
