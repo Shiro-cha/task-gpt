@@ -31,7 +31,7 @@ const executorFacade = new ExecutorFacade(command);
 console.log(executorFacade.executeCommand());
 
 // test gemini
-generateContentWithGemini("Hello, how are you? are everything going well?")
+generateContentWithGemini("How is your girlfriend? Is she happy?")
   .then((response) => {
     console.log("Gemini response:", response);
   })
