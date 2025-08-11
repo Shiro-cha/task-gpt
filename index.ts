@@ -10,8 +10,6 @@ import { ExecutionLog } from "./models/ExecutionLog";
 import { GeminiResponseValidator } from './utils/GeminiResponseValidator';
 
 
-console.log("GEMINI_API_KEY =", Bun.env.API_KEY_GEMINI);
-// Charge les variables du fichier .env dans process.env
 
 
 const message = new Message("1", "Hello, please show all connected users", new Date(), new User("1", "John Doe", "YV7Gj@example.com", new Date()));
@@ -22,7 +20,7 @@ console.log("GEMINI RESPONSE:", geminiResponse);
     const repsonseJson = JSON.parse(geminiResponse);
     const command = new Command(repsonseJson.command_name, repsonseJson.task.join(" && "), new Date(), "Pending");
     const executorFacade = new ExecutorFacade(command);
-    console.log(executorFacade.executeCommand());
+    executorFacade.executeCommand()
 }
 
 const feedback = "This is a great message!";
