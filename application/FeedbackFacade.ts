@@ -8,6 +8,6 @@ export class FeedbackFacade {
         this.log = log;
     }
     getFeedback(): string {
-        return this.log.feedback;
+        return ` Feedback for command ${this.log.commandName} on message ${this.log.messageId}: ${this.log.feedback}`;
     }
 }
