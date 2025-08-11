@@ -17,6 +17,7 @@ console.log("GEMINI_API_KEY =", Bun.env.API_KEY_GEMINI);
 const message = new Message("1", "Hello, please show all connected users", new Date(), new User("1", "John Doe", "YV7Gj@example.com", new Date()));
 const messageFacade = new MessageFacade(message);
 const geminiResponse = await messageFacade.sendMessage();
+console.log("GEMINI RESPONSE:", geminiResponse);
  if(GeminiResponseValidator.isCommand(geminiResponse)){
     const repsonseJson = JSON.parse(geminiResponse);
     const command = new Command(repsonseJson.command_name, repsonseJson.task.join(" && "), new Date(), "Pending");
