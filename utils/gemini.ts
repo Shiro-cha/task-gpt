@@ -27,7 +27,7 @@ Given a user message, translate it into a JSON command object in this exact form
 
 **Important: Return ONLY the JSON object. Do NOT add any explanation, text, or formatting.**
 
-User message: "<USER_MESSAGE>"
+User message: "${message}"
 
   `;
 
