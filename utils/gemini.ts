@@ -1,6 +1,5 @@
+import fetch from "node-fetch";  // si tu es en Node.js
 
-
-         // Affiche 3000
 
 
 export const generateContentWithGemini = async (
