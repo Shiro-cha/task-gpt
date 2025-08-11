@@ -7,7 +7,7 @@ export const generateContentWithGemini = async (
   message: string,
 
 ): Promise<string> => {
-  const API_KEY = Bun.env.GEMINI_API_KEY;
+  const API_KEY = Bun.env.API_KEY_GEMINI;
   if (!API_KEY) throw new Error("Clé API Gemini manquante");
 
   

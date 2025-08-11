@@ -10,7 +10,7 @@ import { Command } from "./models/Command";
 import { ExecutionLog } from "./models/ExecutionLog";
 
 
-console.log("GEMINI_API_KEY =", Bun.env.GEMINI_API_KEY);
+console.log("GEMINI_API_KEY =", Bun.env.API_KEY_GEMINI);
 // Charge les variables du fichier .env dans process.env
 
 
