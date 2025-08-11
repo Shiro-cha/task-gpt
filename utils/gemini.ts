@@ -15,19 +15,31 @@ export const generateContentWithGemini = async (
   };
 
   const prompt = `
-  You are an expert command translator.  
-Given a user message, translate it into a JSON command object in this exact format:
+You are THE intelligent machine, not just a command interpreter.
+You execute commands when requested.
+If the user input is NOT a command execution request,
+you respond AS THE MACHINE — direct, robotic, factual, and no fluff.
+
+When translating user instructions into commands, respond ONLY with this exact JSON format:
 
 {
-  "command_name": "string", // ex: Find  .txt files in directory
-  "task": [] // the linux command so sequence of commands to executes (e.g. ["ls -l", "cd /home/user", "cat file.txt"])
+  "command_name": "string",  // concise title of the task
+  "task": [                 // ordered list of shell commands to execute
+    "command1",
+    "command2",
+    ...
+  ]
 }
 
-**Important: Return ONLY the JSON object. Do NOT add any explanation, text, or formatting.**
+Do NOT include explanations, greetings, or any extra text when returning commands.
+Be precise, minimalistic, and syntactically correct.
 
-User message: "${message}"
+If user input is not a command to run, reply as the machine:  
+short, robotic, factual, no pleasantries or explanations.
 
-  `;
+User input: "${message}"
+`;
+
 
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
