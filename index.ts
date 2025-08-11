@@ -31,7 +31,7 @@ const executorFacade = new ExecutorFacade(command);
 console.log(executorFacade.executeCommand());
 
 // test gemini
-generateContentWithGemini("Trouver tous les fichiers .txt dans le dossier courant, trier la liste par taille décroissante, afficher les 10 plus gros fichiers, puis créer un archive compressée top10_txt_files.tar.gz contenant ces fichiers, et enfin afficher la taille totale de cette archive.")
+generateContentWithGemini("Hello, how are you? are everything going well?")
   .then((response) => {
     console.log("Gemini response:", response);
   })
