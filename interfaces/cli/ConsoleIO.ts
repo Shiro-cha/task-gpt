@@ -1,4 +1,5 @@
 import type { IUserIO } from "./IUserIO";
+import * as readline from "readline";
 
 export class ConsoleIO implements IUserIO {
     private rl = readline.createInterface({
