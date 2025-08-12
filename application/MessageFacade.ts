@@ -16,6 +16,9 @@ export class MessageFacade {
     interpretMessage(): string {
         return `Message interpreted: ${this.message.text}`;
     }
+    setMessage(message: Message): void {
+        this.message = message;
+    }
     cleanJson(s: string) {
     s = s.replace(/```(\w+)?/g, "").trim()
     const m = s.match(/\{[\s\S]*\}/)

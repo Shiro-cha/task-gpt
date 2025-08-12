@@ -9,58 +9,96 @@ import readline from "node:readline/promises";
 import { IGeminiProvider, GeminiProvider } from "./infrastructures/llm/GeminiProvider";
 import { IHttpClient, FetchHttpClient } from "./infrastructures/http/FetchHttpClient";
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
+// IUserIO interface for input/output abstraction
+interface IUserIO {
+    question(prompt: string): Promise<string>;
+    print(message: string): void;
+    close(): void;
+}
 
-class App {
-    private messageFacade: IMessageFacade;
-    private executorFacadeFactory: (command: Command) => IExecutorFacade;
+// ConsoleIO implementation using readline
+class ConsoleIO implements IUserIO {
+    private rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
 
-    constructor(messageFacade: IMessageFacade, executorFacadeFactory: (command: Command) => IExecutorFacade) {
-        this.messageFacade = messageFacade;
-        this.executorFacadeFactory = executorFacadeFactory;
+    async question(prompt: string): Promise<string> {
+        return await this.rl.question(prompt);
     }
 
-    async run() {
-        while (true) {
-            const userInput = await rl.question("\nEnter your message (or 'exit' to quit): ");
+    print(message: string): void {
+        console.log(message);
+    }
 
+    close(): void {
+        this.rl.close();
+    }
+}
+
+// CommandFactory for SRP
+class CommandFactory {
+    static createFromGeminiResponse(response: string): Command | null {
+        if (!GeminiResponseValidator.isCommand(response)) return null;
+        try {
+            const responseJson = JSON.parse(response);
+            if (
+                typeof responseJson.command_name !== "string" ||
+                !Array.isArray(responseJson.task)
+            ) {
+                return null;
+            }
+            return new Command(
+                responseJson.command_name,
+                responseJson.task.join(" && "),
+                new Date(),
+                "Pending"
+            );
+        } catch {
+            return null;
+        }
+    }
+}
+
+// App class
+class App {
+    constructor(
+        private readonly messageFacade: IMessageFacade,
+        private readonly executorFacadeFactory: (command: Command) => IExecutorFacade,
+        private readonly userIO: IUserIO,
+        private readonly user: User
+    ) {}
+
+    async run(): Promise<void> {
+        while (true) {
+            const userInput = await this.userIO.question("\nEnter your message (or 'exit' to quit): ");
             if (userInput.trim().toLowerCase() === "exit") {
-                console.log("Goodbye!");
+                this.userIO.print("Goodbye!");
                 break;
             }
-
             try {
                 const message = new Message(
-                    "1",
+                    this.user.id,
                     userInput,
                     new Date(),
-                    new User("1", "John Doe", "YV7Gj@example.com", new Date())
+                    this.user
                 );
                 this.messageFacade.setMessage(message);
 
                 const geminiResponse = await this.messageFacade.sendMessage();
 
-                if (GeminiResponseValidator.isCommand(geminiResponse)) {
-                    const responseJson = JSON.parse(geminiResponse);
-                    const command = new Command(
-                        responseJson.command_name,
-                        responseJson.task.join(" && "),
-                        new Date(),
-                        "Pending"
-                    );
+                const command = CommandFactory.createFromGeminiResponse(geminiResponse);
+                if (command) {
                     const executorFacade = this.executorFacadeFactory(command);
                     await executorFacade.executeCommand();
                 } else {
-                    console.log(geminiResponse);
+                    this.userIO.print(geminiResponse);
                 }
             } catch (err) {
-                console.error("Error:", err);
+                this.userIO.print(`Error: ${err instanceof Error ? err.message : String(err)}`);
             }
         }
-        rl.close();
+        this.userIO.close();
     }
 }
 
@@ -69,6 +107,8 @@ const httpClient: IHttpClient = new FetchHttpClient();
 const llmProvider: IGeminiProvider = new GeminiProvider(appConfig.gemini.apiUrl, appConfig.gemini.apiKey, httpClient);
 const messageFacade: IMessageFacade = new MessageFacade(undefined, llmProvider);
 const executorFacadeFactory = (command: Command) => new ExecutorFacade(command);
+const userIO: IUserIO = new ConsoleIO();
+const user = new User("1", "John Doe", "YV7Gj@example.com", new Date());
 
-const app = new App(messageFacade, executorFacadeFactory);
+const app = new App(messageFacade, executorFacadeFactory, userIO, user);
 await app.run();
