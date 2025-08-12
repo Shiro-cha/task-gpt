@@ -9,10 +9,16 @@ export class MessageFacade {
 
         async sendMessage(): Promise<string> {   
         const readyMessage = PromptBuilder.forCommand(this.message);   
-        return this.llmProvider.sendMessage(readyMessage);
+        const resultMessage = this.llmProvider.sendMessage(readyMessage);
+        return this.cleanJson(await resultMessage);
     
     }
     interpretMessage(): string {
         return `Message interpreted: ${this.message.text}`;
+    }
+    cleanJson(s: string) {
+    s = s.replace(/```(\w+)?/g, "").trim()
+    const m = s.match(/\{[\s\S]*\}/)
+    return m ? m[0] : s
     }
 }
