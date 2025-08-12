@@ -39,7 +39,7 @@ class App {
                 );
                 this.messageFacade.setMessage(message);
 
-                const geminiResponse = await this.messageFacade.sendMessage();
+                const geminiResponse = "";//await this.messageFacade.sendMessage();
 
                 const command = CommandFactory.createFromGeminiResponse(geminiResponse);
                 if (command) {
