@@ -8,33 +8,10 @@ import { GeminiResponseValidator } from "./utils/GeminiResponseValidator";
 import readline from "node:readline/promises";
 import { IGeminiProvider, GeminiProvider } from "./infrastructures/llm/GeminiProvider";
 import { IHttpClient, FetchHttpClient } from "./infrastructures/http/FetchHttpClient";
+import type { IUserIO } from "./interfaces/IUserIO";
+import { ConsoleIO } from "./interfaces/ConsoleIO";
 
-// IUserIO interface for input/output abstraction
-interface IUserIO {
-    question(prompt: string): Promise<string>;
-    print(message: string): void;
-    close(): void;
-}
 
-// ConsoleIO implementation using readline
-class ConsoleIO implements IUserIO {
-    private rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
-    async question(prompt: string): Promise<string> {
-        return await this.rl.question(prompt);
-    }
-
-    print(message: string): void {
-        console.log(message);
-    }
-
-    close(): void {
-        this.rl.close();
-    }
-}
 
 // CommandFactory for SRP
 class CommandFactory {
