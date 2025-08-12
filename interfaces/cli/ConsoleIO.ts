@@ -1,21 +1,29 @@
 import type { IUserIO } from "./IUserIO";
-import * as readline from "readline";
 
 export class ConsoleIO implements IUserIO {
-    private rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
+  async question(prompt: string): Promise<string> {
+    await Bun.write(prompt); // display prompt
 
-    async question(prompt: string): Promise<string> {
-        return await this.rl.question(prompt);
+    let input = "";
+    const buf = new Uint8Array(1);
+    while (true) {
+      const n = await Bun.stdin.read(buf);
+      if (n === null) break; // EOF
+
+      const char = String.fromCharCode(buf[0]);
+      if (char === "\n" || char === "\r") break;
+
+      input += char;
     }
 
-    print(message: string): void {
-        console.log(message);
-    }
+    return input.trim();
+  }
 
-    close(): void {
-        this.rl.close();
-    }
+  print(message: string): void {
+    console.log(message);
+  }
+
+  close(): void {
+    // No readline interface to close in Bun
+  }
 }
