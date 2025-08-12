@@ -8,7 +8,6 @@ export class ExecutorFacade {
         if (!this.command || !this.command.task) {
             throw new Error("No command provided");
         }
-		console.log(`Executing command: ${this.command.task}`);
         const output = await ExecutorFacade.runSubProcess(this.command.task as string);
         console.log(output);
     
