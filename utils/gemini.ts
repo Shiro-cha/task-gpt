@@ -15,9 +15,6 @@ export const generateContentWithGemini = async (
   if (!API_KEY) throw new Error("Clé API Gemini manquante");
 
   
-  const stylePrompts: Record<string, string> = {
-    command: "en une punchline de meme drôle et accrocheuse"
-  };
 
 const prompt = `
 You are THE intelligent machine, a highly efficient robot like Baymax from Big Hero 6.
