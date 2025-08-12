@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 export const appConfig = {
   llmProvider: process.env.LLM_PROVIDER || "gemini",
