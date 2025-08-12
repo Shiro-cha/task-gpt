@@ -1,47 +1,20 @@
 import { appConfig } from "./infrastructures/config/appConfig";
-import { IMessageFacade, MessageFacade } from "./application/MessageFacade";
-import { IExecutorFacade, ExecutorFacade } from "./application/ExecutorFacade";
+import {  MessageFacade } from "./application/MessageFacade";
+import { ExecutorFacade } from "./application/ExecutorFacade";
 import { Message } from "./domains/models/Message";
 import { User } from "./domains/models/User";
 import { Command } from "./domains/models/Command";
-import { GeminiResponseValidator } from "./utils/GeminiResponseValidator";
-import readline from "node:readline/promises";
-import { IGeminiProvider, GeminiProvider } from "./infrastructures/llm/GeminiProvider";
-import { IHttpClient, FetchHttpClient } from "./infrastructures/http/FetchHttpClient";
-import type { IUserIO } from "./interfaces/IUserIO";
-import { ConsoleIO } from "./interfaces/ConsoleIO";
+import {  GeminiProvider } from "./infrastructures/llm/GeminiProvider";
+import {  FetchHttpClient } from "./infrastructures/http/FetchHttpClient";
+import type { IUserIO } from "./interfaces/cli/IUserIO";
+import { ConsoleIO } from "./interfaces/cli/ConsoleIO";
+import { CommandFactory } from "./application/factories/CommandFactory";
+import type { IHttpClient } from "./domains/interfaces/IHTTPClient";
 
-
-
-// CommandFactory for SRP
-class CommandFactory {
-    static createFromGeminiResponse(response: string): Command | null {
-        if (!GeminiResponseValidator.isCommand(response)) return null;
-        try {
-            const responseJson = JSON.parse(response);
-            if (
-                typeof responseJson.command_name !== "string" ||
-                !Array.isArray(responseJson.task)
-            ) {
-                return null;
-            }
-            return new Command(
-                responseJson.command_name,
-                responseJson.task.join(" && "),
-                new Date(),
-                "Pending"
-            );
-        } catch {
-            return null;
-        }
-    }
-}
-
-// App class
 class App {
     constructor(
-        private readonly messageFacade: IMessageFacade,
-        private readonly executorFacadeFactory: (command: Command) => IExecutorFacade,
+        private readonly messageFacade: MessageFacade,
+        private readonly executorFacadeFactory: (command: Command) => ExecutorFacade,
         private readonly userIO: IUserIO,
         private readonly user: User
     ) {}
@@ -81,8 +54,8 @@ class App {
 
 // Dependency creation
 const httpClient: IHttpClient = new FetchHttpClient();
-const llmProvider: IGeminiProvider = new GeminiProvider(appConfig.gemini.apiUrl, appConfig.gemini.apiKey, httpClient);
-const messageFacade: IMessageFacade = new MessageFacade(undefined, llmProvider);
+const llmProvider: GeminiProvider = new GeminiProvider(appConfig.gemini.apiUrl, appConfig.gemini.apiKey, httpClient);
+const messageFacade: MessageFacade = new MessageFacade(undefined, llmProvider);
 const executorFacadeFactory = (command: Command) => new ExecutorFacade(command);
 const userIO: IUserIO = new ConsoleIO();
 const user = new User("1", "John Doe", "YV7Gj@example.com", new Date());
