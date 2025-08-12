@@ -62,7 +62,7 @@ const llmProvider: GeminiProvider = new GeminiProvider(appConfig.gemini.apiUrl, 
 const messageFacade: MessageFacade = new MessageFacade(undefined, llmProvider);
 const executorFacadeFactory = (command: Command) => new ExecutorFacade(command);
 const userIO: IUserIO = new ConsoleIO();
-const user = new User("1", "John Doe", "YV7Gj@example.com", new Date());
+const user = new User("1", "Nomena", "nomena@gmail.com", new Date());
 
 const app = new App(messageFacade, executorFacadeFactory, userIO, user);
 await app.run();
