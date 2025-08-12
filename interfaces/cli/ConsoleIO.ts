@@ -12,7 +12,6 @@ const COLORS = {
 
 export class ConsoleIO implements IUserIO {
   async question(prompt: string): Promise<string> {
-    // Modern prompt style: cyan, bold, with a fancy arrow
     const decoratedPrompt = `${COLORS.cyan}${COLORS.bold}❯${COLORS.reset} ${COLORS.magenta}${prompt}${COLORS.reset} `;
     process.stdout.write(decoratedPrompt);
     for await (const line of console) {
@@ -22,8 +21,7 @@ export class ConsoleIO implements IUserIO {
   }
 
   print(message: string): void {
-    // Print output in green for success/info, yellow for warnings, magenta for general
-    // Simple heuristic: if message contains "error" or "warn", use yellow, else green
+
     let color = COLORS.green;
     if (/error|warn/i.test(message)) {
       color = COLORS.yellow;
