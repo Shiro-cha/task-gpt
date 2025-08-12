@@ -1,12 +1,13 @@
+import type { ILLM } from "../domains/interfaces/ILLM";
 import type { Message } from "../domains/models/Message";
-import { generateContentWithGemini } from "../utils/gemini";
+
 
 export class MessageFacade {
-    constructor(private message: Message) {}
+    constructor(private message: Message,private llmProvider: ILLM) {}
 
 
         async sendMessage(): Promise<string> {      
-        return generateContentWithGemini(this.message.text) 
+        return this.llmProvider.sendMessage(this.message.text);
     
     }
     interpretMessage(): string {

@@ -8,10 +8,12 @@ interface IHttpClient {
 
 export class GeminiProvider implements ILLM {
     private readonly apiUrl: string;
+    private readonly apiKey: string;
     private readonly httpClient: IHttpClient;
 
-    constructor(apiUrl: string, httpClient: IHttpClient = new FetchHttpClient()) {
+    constructor(apiUrl: string,apikey:string, httpClient: IHttpClient = new FetchHttpClient()) {
         this.apiUrl = apiUrl;
+        this.apiKey = apikey;
         this.httpClient = httpClient;
     }
 

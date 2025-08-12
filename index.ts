@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+import { appConfig } from "./infrastructures/config/appConfig";
 import { MessageFacade } from "./application/MessageFacade";
 import { FeedbackFacade } from "./application/FeedbackFacade";
 import { ExecutorFacade } from "./application/ExecutorFacade";
@@ -9,6 +8,8 @@ import { Command } from "./domains/models/Command";
 import { ExecutionLog } from "./domains/models/ExecutionLog";
 import { GeminiResponseValidator } from "./utils/GeminiResponseValidator";
 import readline from "node:readline/promises";
+import { GeminiProvider } from "./infrastructures/llm/GeminiProvider";
+import { FetchHttpClient } from "./infrastructures/http/FetchHttpClient";
 
 
 const rl = readline.createInterface({
@@ -32,8 +33,8 @@ async function mainLoop() {
 				new Date(),
 				new User("1", "John Doe", "YV7Gj@example.com", new Date())
 			);
-
-			const messageFacade = new MessageFacade(message);
+            const llmProvider = new GeminiProvider(appConfig.gemini.apiUrl,appConfig.gemini.apiKey, new FetchHttpClient());
+			const messageFacade = new MessageFacade(message,llmProvider);
 			const geminiResponse = await messageFacade.sendMessage();
 
 			if (GeminiResponseValidator.isCommand(geminiResponse)) {
