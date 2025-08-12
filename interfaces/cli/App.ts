@@ -16,7 +16,7 @@ export class App {
 
     async run(): Promise<void> {
         while (true) {
-            const userInput = await this.userIO.question("\nEnter your message (or 'exit' to quit): ");
+            const userInput = await this.userIO.question("\n   ");
             if (userInput.trim().toLowerCase() === "exit") {
                 this.userIO.print("Goodbye!");
                 break;
