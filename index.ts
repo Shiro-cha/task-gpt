@@ -26,6 +26,10 @@ class App {
                 this.userIO.print("Goodbye!");
                 break;
             }
+            if (!userInput.trim()) {
+                this.userIO.print("Input cannot be empty. Please enter a message.");
+                continue;
+            }
             try {
                 const message = new Message(
                     this.user.id,
