@@ -11,7 +11,6 @@ export class ConsoleIO implements IUserIO {
     if (n === null) break;
 
     const char = String.fromCharCode(buf[0]);
-    if (char === "\n" || char === "\r") break;
 
     input += char;
     
