@@ -3,10 +3,10 @@ dotenv.config();
 import { MessageFacade } from "./application/MessageFacade";
 import { FeedbackFacade } from "./application/FeedbackFacade";
 import { ExecutorFacade } from "./application/ExecutorFacade";
-import { Message } from "./models/Message";
-import { User } from "./models/User";
-import { Command } from "./models/Command";
-import { ExecutionLog } from "./models/ExecutionLog";
+import { Message } from "./domains/models/Message";
+import { User } from "./domains/models/User";
+import { Command } from "./domains/models/Command";
+import { ExecutionLog } from "./domains/models/ExecutionLog";
 import { GeminiResponseValidator } from "./utils/GeminiResponseValidator";
 import readline from "node:readline/promises";
 

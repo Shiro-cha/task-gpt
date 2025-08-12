@@ -1,4 +1,4 @@
-import type { Message } from "../models/Message";
+import type { Message } from "../domains/models/Message";
 import { generateContentWithGemini } from "../utils/gemini";
 
 export class MessageFacade {

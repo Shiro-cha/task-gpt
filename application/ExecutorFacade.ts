@@ -1,4 +1,4 @@
-import type { Command } from "../models/Command";
+import type { Command } from "../domains/models/Command";
 
 export class ExecutorFacade {
 	constructor(private readonly command: Command) {}

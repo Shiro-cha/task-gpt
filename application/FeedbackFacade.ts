@@ -1,4 +1,4 @@
-import type { ExecutionLog } from "../models/ExecutionLog";
+import type { ExecutionLog } from "../domains/models/ExecutionLog";
 
 export class FeedbackFacade {
 
