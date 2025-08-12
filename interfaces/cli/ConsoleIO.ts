@@ -8,7 +8,6 @@ export class ConsoleIO implements IUserIO {
     const buf = new Uint8Array(1);
 
     const n = await process.stdin.read(buf);
-    if (n === null) break;
 
     const char = String.fromCharCode(buf[0]);
 
