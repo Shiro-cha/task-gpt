@@ -7,15 +7,14 @@ export class ConsoleIO implements IUserIO {
     let input = "";
     const buf = new Uint8Array(1);
 
-    while (true) {
-      const n = await process.stdin.read(buf);
-      if (n === null) break;
+    const n = await process.stdin.read(buf);
+    if (n === null) break;
 
-      const char = String.fromCharCode(buf[0]);
-      if (char === "\n" || char === "\r") break;
+    const char = String.fromCharCode(buf[0]);
+    if (char === "\n" || char === "\r") break;
 
-      input += char;
-    }
+    input += char;
+    
 
     return input.trim();
   }
