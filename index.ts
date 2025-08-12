@@ -56,7 +56,7 @@ class App {
     }
 }
 
-// Dependency creation
+
 const httpClient: IHttpClient = new FetchHttpClient();
 const llmProvider: GeminiProvider = new GeminiProvider(appConfig.gemini.apiUrl, appConfig.gemini.apiKey, httpClient);
 const messageFacade: MessageFacade = new MessageFacade(undefined, llmProvider);
