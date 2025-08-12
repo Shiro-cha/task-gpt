@@ -18,6 +18,9 @@ export class GeminiProvider implements ILLM {
     }
 
     async sendMessage(message: string): Promise<string> {
-        return this.httpClient.post(this.apiUrl, { message });
+        return this.httpClient.post(this.getUrlWithApiKey(), { message });
+    }
+    getUrlWithApiKey(): string {
+        return `${this.apiUrl}?key=${this.apiKey}`;
     }
 }
