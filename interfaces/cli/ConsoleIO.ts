@@ -2,23 +2,23 @@ import type { IUserIO } from "./IUserIO";
 
 export class ConsoleIO implements IUserIO {
   async question(prompt: string): Promise<string> {
-  await Bun.write(Buffer.from(prompt)); // THIS WORKS
+    process.stdout.write(prompt); // no await needed for write
 
-  let input = "";
-  const buf = new Uint8Array(1);
-  while (true) {
-    const n = await Bun.stdin.read(buf);
-    if (n === null) break;
+    let input = "";
+    const buf = new Uint8Array(1);
 
-    const char = String.fromCharCode(buf[0]);
-    if (char === "\n" || char === "\r") break;
+    while (true) {
+      const n = await Bun.stdin.read(buf);
+      if (n === null) break;
 
-    input += char;
+      const char = String.fromCharCode(buf[0]);
+      if (char === "\n" || char === "\r") break;
+
+      input += char;
+    }
+
+    return input.trim();
   }
-
-  return input.trim();
-}
-
 
   print(message: string): void {
     console.log(message);
@@ -28,4 +28,3 @@ export class ConsoleIO implements IUserIO {
     // No readline interface to close in Bun, no-op
   }
 }
-
