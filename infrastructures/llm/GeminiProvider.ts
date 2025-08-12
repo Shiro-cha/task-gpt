@@ -18,7 +18,8 @@ export class GeminiProvider implements ILLM {
     }
 
     async sendMessage(message: string): Promise<string> {
-        return this.httpClient.post(this.getUrlWithApiKey(), this.buildHttpBody(message));
+        const response = await this.httpClient.post(this.getUrlWithApiKey(), this.buildHttpBody(message));
+        return this.getResponseText(response);
     }
     getUrlWithApiKey(): string {
         return `${this.apiUrl}?key=${this.apiKey}`;
@@ -39,5 +40,12 @@ export class GeminiProvider implements ILLM {
           maxOutputTokens: 200,
         }
       }
+    }
+    getResponseText(response: string): string {
+        const jsonResponse = JSON.parse(response);
+        if (jsonResponse && jsonResponse.candidates && jsonResponse.candidates.length > 0) {
+            return jsonResponse.candidates[0].content.parts[0].text;
+        }
+        throw new Error("Invalid response format");
     }
 }
