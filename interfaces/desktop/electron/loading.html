@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Loading...</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --bg: #0f172a;
+      --text: #f1f5f9;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .logo {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      color: var(--primary);
+    }
+    .progress-container {
+      width: 80%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      height: 12px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .status {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+    .urls {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+      font-size: 0.8rem;
+    }
+    .url {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .local .dot { background-color: #10b981; }
+    .network .dot { background-color: #f59e0b; }
+  </style>
+</head>
+<body>
+  <div class="logo">▲</div>
+  <h1>Starting Next.js Server</h1>
+  
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+  
+  <div class="status" id="status">Initializing...</div>
+  
+  <div class="urls">
+    <div class="url local">
+      <span class="dot"></span>
+      <span>Local: http://localhost:3000</span>
+    </div>
+    <div class="url network">
+      <span class="dot"></span>
+      <span>Network: http://192.168.88.251:3000</span>
+    </div>
+  </div>
+
+  <script>
+    window.electron.onProgressUpdate((event, { progress, status }) => {
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+      document.getElementById('status').textContent = status;
+    });
+  </script>
+</body>
+</html>
