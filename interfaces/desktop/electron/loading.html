@@ -1,100 +1,147 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Loading...</title>
-  <style>
-    :root {
-      --primary: #2563eb;
-      --bg: #0f172a;
-      --text: #f1f5f9;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-    .logo {
-      font-size: 3rem;
-      margin-bottom: 2rem;
-      color: var(--primary);
-    }
-    .progress-container {
-      width: 80%;
-      max-width: 400px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      height: 12px;
-      margin: 20px 0;
-      overflow: hidden;
-    }
-    .progress-bar {
-      height: 100%;
-      background: var(--primary);
-      border-radius: 10px;
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-    .status {
-      margin-top: 15px;
-      font-size: 0.9rem;
-      color: #94a3b8;
-    }
-    .urls {
-      display: flex;
-      gap: 20px;
-      margin-top: 20px;
-      font-size: 0.8rem;
-    }
-    .url {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .local .dot { background-color: #10b981; }
-    .network .dot { background-color: #f59e0b; }
-  </style>
+<meta charset="UTF-8">
+<title>TaskGPT Loading</title>
+<style>
+  :root {
+    --primary: #4f46e5;
+    --secondary: #10b981;
+    --accent: #f59e0b;
+    --bg: #0f172a;
+    --text: #e5e7eb;
+    --shadow: rgba(0,0,0,0.3);
+  }
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body {
+    height: 100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    font-family:'Inter',sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  .logo {
+    font-size: 5rem;
+    animation: bounce 2s infinite;
+    margin-bottom: 0.5rem;
+  }
+  @keyframes bounce {
+    0%,100%{transform:translateY(0);} 
+    50%{transform:translateY(-15px);}
+  }
+  h1 {
+    font-size:2rem;
+    margin-bottom:1rem;
+    background: linear-gradient(90deg,var(--primary),var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--secondary);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:1rem;
+    box-shadow: 0 0 20px var(--shadow);
+    animation: rotate 5s linear infinite;
+  }
+  @keyframes rotate { 0%{transform:rotate(0deg);}100%{transform:rotate(360deg);} }
+  .loader {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1rem;
+  }
+  .progress-container {
+    width: 300px;
+    height:12px;
+    background: rgba(255,255,255,0.1);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 0 10px var(--shadow);
+  }
+  .progress-bar {
+    height:100%;
+    width:0%;
+    background: linear-gradient(90deg,var(--primary),var(--secondary));
+    border-radius:12px;
+    transition: width 0.2s ease;
+  }
+  .status {
+    font-size:1rem;
+    color:#94a3b8;
+    min-height:1.2em;
+  }
+  .server-info {
+    margin-top:2rem;
+    display:flex;
+    gap:2rem;
+    font-size:0.85rem;
+  }
+  .server {
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:0.3rem;
+  }
+  .server span.dot {
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    display:inline-block;
+    animation: blink 1.2s infinite;
+  }
+  .local .dot { background-color: var(--secondary); }
+  .network .dot { background-color: var(--accent); }
+  @keyframes blink {
+    0%,50%,100%{opacity:1;} 
+    25%,75%{opacity:0.3;}
+  }
+</style>
 </head>
 <body>
-  <div class="logo">▲</div>
-  <h1>Starting Next.js Server</h1>
-  
-  <div class="progress-container">
-    <div class="progress-bar" id="progress-bar"></div>
+  <div class="logo">🤖</div>
+  <div class="avatar">🛡️</div>
+  <h1>TaskGPT</h1>
+  <div class="loader">
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <div class="status" id="status">Initializing AI...</div>
   </div>
-  
-  <div class="status" id="status">Initializing...</div>
-  
-  <div class="urls">
-    <div class="url local">
+  <div class="server-info">
+    <div class="server local">
       <span class="dot"></span>
       <span>Local: http://localhost:3000</span>
     </div>
-    <div class="url network">
+    <div class="server network">
       <span class="dot"></span>
       <span>Network: http://192.168.88.251:3000</span>
     </div>
   </div>
-
   <script>
-    window.electron.onProgressUpdate((event, { progress, status }) => {
+    const messages = [
+      "Warming up engines...",
+      "Analyzing tasks...",
+      "Loading AI modules...",
+      "Almost ready...",
+      "Connecting to server..."
+    ];
+    let index = 0;
+    const statusEl = document.getElementById('status');
+    setInterval(()=>{
+      statusEl.textContent = messages[index % messages.length];
+      index++;
+    },2000);
+    window.electron.onProgressUpdate((event, { progress, status })=>{
       document.getElementById('progress-bar').style.width = `${progress}%`;
-      document.getElementById('status').textContent = status;
+      if(status) statusEl.textContent = status;
     });
   </script>
 </body>
