@@ -5,4 +5,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   onMessage: (channel: string, callback: (data: any) => void) => {
     ipcRenderer.on(channel, (_, data) => callback(data));
   },
+  sendStatus: (status: any) => ipcRenderer.send('compilation-status', status),
+  onProgressUpdate: (callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void) => ipcRenderer.on('progress-update', callback)
 });
