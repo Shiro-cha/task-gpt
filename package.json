@@ -17,7 +17,7 @@
   },
   "scripts": {
     "dev:next": "cd interfaces/desktop/electron/renderer && bun run dev",
-    "dev:electron": "bunx electron src/interfaces/desktop/electron/main.ts",
+    "dev:electron": "bunx electron interfaces/desktop/electron/main.ts",
     "dev": "bunx concurrently \"bun run dev:next\" \"bun run dev:electron\"",
     "build:next": "bunx next build src/interfaces/electron/renderer && bunx next export -o src/interfaces/electron/renderer/out",
     "start": "bunx electron src/interfaces/electron/main.ts"

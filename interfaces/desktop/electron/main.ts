@@ -2,12 +2,22 @@ import { app, BrowserWindow } from "electron";
 import path from "path";
 import isDev from "electron-is-dev";
 
-let mainWindow: BrowserWindow;
 const __filename = new URL(import.meta.url).pathname;
 const __dirname = path.dirname(__filename);
 
+let mainWindow: BrowserWindow;
 
-function createWindow() {
+async function waitForServer(url: string) {
+  while (true) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) break; 
+    } catch {}
+    await new Promise(r => setTimeout(r, 100)); 
+}
+}
+
+async function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -22,13 +32,8 @@ function createWindow() {
     ? "http://localhost:3000"
     : `file://${path.join(__dirname, "renderer/out/index.html")}`;
 
+  if (isDev) await waitForServer(url);
   mainWindow.loadURL(url);
 }
 
 app.on("ready", createWindow);
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
-});
-app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0) createWindow();
-});
