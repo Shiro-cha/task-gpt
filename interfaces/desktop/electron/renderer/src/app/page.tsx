@@ -19,8 +19,8 @@ export default function AssistantUI() {
     ];
 
     let current = 0;
-
-    const addLog = (msg: string) => setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
+    const addLog = (msg: string) =>
+      setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
 
     const processStage = () => {
       if (current >= stages.length) return;
@@ -54,10 +54,12 @@ export default function AssistantUI() {
   }, [logs]);
 
   return (
-    <div className="w-[420px] h-[580px] bg-gray-900 text-gray-100 rounded-xl p-4 flex flex-col shadow-lg">
-      <header className="flex items-center justify-between mb-3">
+    <div className="w-screen h-screen bg-gray-900 text-gray-100 flex flex-col p-4 overflow-hidden">
+      <header className="flex items-center justify-between mb-3 flex-shrink-0">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-2xl animate-bounce">🤖</div>
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-2xl animate-bounce">
+            🤖
+          </div>
           <h1 className="text-lg font-bold">TaskGPT</h1>
         </div>
         <div className="flex gap-2">
@@ -67,22 +69,28 @@ export default function AssistantUI() {
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto bg-gray-800 rounded-lg p-3 mb-3 font-mono text-sm">
+      <div className="flex-1 min-h-0 overflow-y-auto bg-gray-800 rounded-lg p-3 font-mono text-sm">
         {logs.map((log, i) => (
-          <div key={i} className={log.includes('ready') ? 'text-green-400' : 'text-gray-100'}>
+          <div
+            key={i}
+            className={log.toLowerCase().includes('ready') ? 'text-green-400' : 'text-gray-100'}
+          >
             {log}
           </div>
         ))}
         <div ref={logEndRef} />
       </div>
 
-      <div className="mb-2">
+      <div className="mb-2 mt-2 flex-shrink-0">
         <div className="h-2 w-full bg-gray-700 rounded-full">
-          <div className="h-full bg-gradient-to-r from-blue-500 to-green-400 transition-all" style={{ width: `${progress}%` }} />
+          <div
+            className="h-full bg-gradient-to-r from-blue-500 to-green-400 transition-all"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </div>
 
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center flex-shrink-0">
         <input
           type="text"
           placeholder="Enter command..."
@@ -91,7 +99,7 @@ export default function AssistantUI() {
         <button className="bg-blue-600 px-3 py-2 rounded-lg hover:bg-blue-500">Send</button>
       </div>
 
-      <nav className="mt-3 flex gap-2 text-xs text-gray-400 justify-center">
+      <nav className="mt-3 flex gap-2 text-xs text-gray-400 justify-center flex-shrink-0">
         <button className="hover:text-white">All</button>
         <button className="hover:text-white">Logs</button>
         <button className="hover:text-white">Errors</button>

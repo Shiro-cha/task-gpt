@@ -14,25 +14,32 @@ function createLoadingWindow() {
     transparent: true,
     alwaysOnTop: true,
     resizable: false,
+    movable: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     }
   });
-  loadingWindow.loadFile(path.join(__dirname, 'interfaces/desktop/electron/loading.html'));
+
+  loadingWindow.loadFile(
+    path.join(__dirname, 'interfaces/desktop/electron/loading.html')
+  );
+
   return loadingWindow;
 }
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
-    width: 450,
-    height: 600,
+    width: 500,
+    height: 650,
     minWidth: 400,
     minHeight: 500,
     show: false,
-    frame: false,
+    frame: true,
     alwaysOnTop: true,
+    resizable: false,
+    movable: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -85,8 +92,17 @@ app.whenReady().then(() => {
       loadingWindow.webContents.send('progress-update', data);
     }
   });
+
+  ipcMain.on('close-window', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.close();
+    if (loadingWindow && !loadingWindow.isDestroyed()) loadingWindow.close();
+  });
 });
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
+});
+
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
 });
