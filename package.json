@@ -4,12 +4,22 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "electron": "^37.3.0",
+    "concurrently": "^8.2.0"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
-    "dotenv": "^17.2.1"
+    "dotenv": "^17.2.1",
+    "electron-is-dev": "^3.0.1"
+  },
+  "scripts": {
+    "dev:next": "bunx dev src/interfaces/electron/renderer",
+    "dev:electron": "bunx electron src/interfaces/electron/main.ts",
+    "dev": "bunx concurrently \"bun run dev:next\" \"bun run dev:electron\"",
+    "build:next": "bunx next build src/interfaces/electron/renderer && bunx next export -o src/interfaces/electron/renderer/out",
+    "start": "bunx electron src/interfaces/electron/main.ts"
   }
 }
