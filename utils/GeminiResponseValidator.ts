@@ -14,7 +14,7 @@ export class GeminiResponseValidator {
       const isValid =
         typeof parsed.command_name === "string" &&
         Array.isArray(parsed.task) &&
-        parsed.task.every(cmd => typeof cmd === "string");
+        parsed.task.every((cmd: any) => typeof cmd === "string");
 
       return isValid ? parsed : null;
     } catch {

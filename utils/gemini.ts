@@ -68,11 +68,17 @@ User input: "${message}"
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.error?.message || "Erreur API Gemini");
+    const errorObj = errorData as { error?: { message?: string } };
+    throw new Error(errorObj.error?.message || "Erreur API Gemini");
   }
 
-  //console.log(response);
-  const data = await response.json();
+  const data = await response.json() as {
+    candidates?: Array<{
+      content?: {
+        parts?: Array<{ text?: string }>
+      }
+    }>
+  };
   const cleanedResponse = cleanJson(data.candidates?.[0]?.content?.parts?.[0]?.text || "");
   return cleanedResponse|| message;
 };
