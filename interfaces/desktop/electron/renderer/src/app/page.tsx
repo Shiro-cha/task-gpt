@@ -42,7 +42,7 @@ export default function ServerLoader() {
       setStatus(stage.text);
       addLog(stage.text);
       
-      // Simulate progress within each stage
+  
       const startProgress = progress;
       const endProgress = stage.progress;
       const increment = (endProgress - startProgress) / (stage.duration / 30);
@@ -70,7 +70,7 @@ export default function ServerLoader() {
     };
   }, []);
 
-  // Auto-scroll logs to bottom
+
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
