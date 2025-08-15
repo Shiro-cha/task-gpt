@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import path from 'path';
 
 const __dirname = path.resolve();
@@ -30,9 +30,12 @@ function createLoadingWindow() {
 }
 
 function createMainWindow() {
-  mainWindow = new BrowserWindow({
-    width: 500,
-    height: 650,
+    const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize;
+    const winWidth = Math.round(screenWidth * 0.35);
+    const winHeight = Math.round(screenHeight * 0.90);
+    mainWindow = new BrowserWindow({
+    width: winWidth,
+    height: winHeight,
     minWidth: 400,
     minHeight: 500,
     show: false,

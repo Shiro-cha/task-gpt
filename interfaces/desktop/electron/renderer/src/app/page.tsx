@@ -103,7 +103,7 @@ export default function AssistantUI() {
             activeTab === "logs" ? "bg-blue-600 text-white shadow-md" : "bg-gray-800 text-gray-400 hover:bg-gray-700"
           }`}
         >
-          Logs
+          Screen
         </button>
       </div>
 
