@@ -1,39 +1,88 @@
-import { app, BrowserWindow } from "electron";
-import path from "path";
-import isDev from "electron-is-dev";
+import { app, BrowserWindow, ipcMain } from 'electron';
+import path from 'path';
 
-const __filename = new URL(import.meta.url).pathname;
-const __dirname = path.dirname(__filename);
+let mainWindow: BrowserWindow | null = null;
+let loadingWindow: BrowserWindow | null = null;
 
-let mainWindow: BrowserWindow;
+function createLoadingWindow() {
+  loadingWindow = new BrowserWindow({
+    width: 600,
+    height: 400,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
+    }
+  });
 
-async function waitForServer(url: string) {
-  while (true) {
-    try {
-      const res = await fetch(url);
-      if (res.ok) break; 
-    } catch {}
-    await new Promise(r => setTimeout(r, 100)); 
+  loadingWindow.loadFile('loading.html');
+  return loadingWindow;
 }
-}
 
-async function createWindow() {
+function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    show: false,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
       contextIsolation: true,
-    },
+      preload: path.join(__dirname, 'preload.js')
+    }
   });
 
-  const url = isDev
-    ? "http://localhost:3000"
-    : `file://${path.join(__dirname, "renderer/out/index.html")}`;
+  mainWindow.loadURL('http://localhost:3000');
+  
+  mainWindow.once('ready-to-show', () => {
+    if (loadingWindow) {
+      loadingWindow.close();
+      loadingWindow = null;
+    }
+    mainWindow?.show();
+  });
 
-  if (isDev) await waitForServer(url);
-  mainWindow.loadURL(url);
+  return mainWindow;
 }
 
-app.on("ready", createWindow);
+function simulateCompilationProgress() {
+  const stages = [
+    { status: 'Resolving dependencies...', progress: 10 },
+    { status: 'Building modules...', progress: 25 },
+    { status: 'Optimizing dependencies...', progress: 40 },
+    { status: 'Starting Turbopack...', progress: 60 },
+    { status: 'Compiling components...', progress: 80 },
+    { status: 'Finalizing compilation...', progress: 95 },
+    { status: 'Ready! Launching app...', progress: 100 }
+  ];
+
+  let currentStage = 0;
+  
+  const interval = setInterval(() => {
+    if (currentStage < stages.length && loadingWindow) {
+      loadingWindow.webContents.send('progress-update', stages[currentStage]);
+      currentStage++;
+    } else {
+      clearInterval(interval);
+      createMainWindow();
+    }
+  }, 1000);
+}
+
+app.whenReady().then(() => {
+  const loadingWin = createLoadingWindow();
+  simulateCompilationProgress();
+
+  ipcMain.on('compilation-status', (event, status) => {
+    if (loadingWin && !loadingWin.isDestroyed()) {
+      loadingWin.webContents.send('progress-update', status);
+    }
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
