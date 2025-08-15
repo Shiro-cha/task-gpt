@@ -4,8 +4,8 @@ import './globals.css';
 import ElectronReportStatus from './ElectronReportStatus';
 
 export const metadata: Metadata = {
-  title: 'My Electron App',
-  description: 'Next.js + Electron',
+  title: `Echo - Your smart machine assistant.`,
+  description: 'Your smart machine assistant.',
 };
 
 export default function RootLayout({

@@ -79,7 +79,7 @@ export default function AssistantUI() {
           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl animate-bounce shadow-lg">
             🤖
           </div>
-          <h1 className="text-xl font-bold tracking-wide">TaskGPT</h1>
+          <h1 className="text-xl font-bold tracking-wide">Echo</h1>
         </div>
         <div className="flex gap-2">
           <button className="w-3 h-3 bg-red-500 rounded-full" />
