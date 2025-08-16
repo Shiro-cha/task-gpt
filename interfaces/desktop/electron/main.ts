@@ -1,111 +1,120 @@
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import path from 'path';
 
-const __dirname = path.resolve();
+export class ElectronApp {
+  private mainWindow: BrowserWindow | null = null;
+  private loadingWindow: BrowserWindow | null = null;
+  private readonly __dirname = path.resolve();
 
-let mainWindow: BrowserWindow | null = null;
-let loadingWindow: BrowserWindow | null = null;
+  constructor(private nextURL: string = 'http://localhost:3000') {}
 
-function createLoadingWindow() {
-  loadingWindow = new BrowserWindow({
-    width: 400,
-    height: 300,
-    frame: false,
-    transparent: true,
-    alwaysOnTop: true,
-    resizable: false,
-    movable: true,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
-    }
-  });
+  private createLoadingWindow() {
+    this.loadingWindow = new BrowserWindow({
+      width: 400,
+      height: 300,
+      frame: false,
+      transparent: true,
+      alwaysOnTop: true,
+      resizable: false,
+      movable: true,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: path.join(this.__dirname, 'preload.js'),
+      },
+    });
 
-  loadingWindow.loadFile(
-    path.join(__dirname, 'interfaces/desktop/electron/loading.html')
-  );
+    this.loadingWindow.loadFile(
+      path.join(this.__dirname, 'interfaces/desktop/electron/loading.html')
+    );
 
-  return loadingWindow;
-}
+    return this.loadingWindow;
+  }
 
-function createMainWindow() {
-    const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize;
+  private createMainWindow() {
+    const { width: screenWidth, height: screenHeight } =
+      screen.getPrimaryDisplay().workAreaSize;
     const winWidth = Math.round(screenWidth * 0.35);
-    const winHeight = Math.round(screenHeight * 0.90);
-    mainWindow = new BrowserWindow({
-    width: winWidth,
-    height: winHeight,
-    minWidth: 400,
-    minHeight: 500,
-    show: false,
-    frame: true,
-    alwaysOnTop: true,
-    resizable: false,
-    movable: true,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
-    }
-  });
+    const winHeight = Math.round(screenHeight * 0.9);
 
-  mainWindow.loadURL('http://localhost:3000');
+    this.mainWindow = new BrowserWindow({
+      width: winWidth,
+      height: winHeight,
+      minWidth: 400,
+      minHeight: 500,
+      show: false,
+      frame: true,
+      alwaysOnTop: true,
+      resizable: false,
+      movable: true,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: path.join(this.__dirname, 'preload.js'),
+      },
+    });
 
-  mainWindow.once('ready-to-show', () => {
-    if (loadingWindow) {
-      loadingWindow.close();
-      loadingWindow = null;
-    }
-    mainWindow?.show();
-  });
+    this.mainWindow.loadURL(this.nextURL);
 
-  return mainWindow;
+    this.mainWindow.once('ready-to-show', () => {
+      if (this.loadingWindow) {
+        this.loadingWindow.close();
+        this.loadingWindow = null;
+      }
+      this.mainWindow?.show();
+    });
+
+    return this.mainWindow;
+  }
+
+  private simulateCompilationProgress() {
+    const stages = [
+      { status: 'Initializing assistant...', progress: 10 },
+      { status: 'Loading modules...', progress: 30 },
+      { status: 'Starting server...', progress: 50 },
+      { status: 'Connecting APIs...', progress: 70 },
+      { status: 'Finalizing...', progress: 90 },
+      { status: 'Ready!', progress: 100 },
+    ];
+
+    let currentStage = 0;
+    const interval = setInterval(() => {
+      if (currentStage < stages.length && this.loadingWindow) {
+        this.loadingWindow.webContents.send('progress-update', stages[currentStage]);
+        currentStage++;
+      } else {
+        clearInterval(interval);
+        this.createMainWindow();
+      }
+    }, 800);
+  }
+
+  private setupIpc() {
+    ipcMain.on('progress-update', (_event, data) => {
+      if (this.loadingWindow && !this.loadingWindow.isDestroyed()) {
+        this.loadingWindow.webContents.send('progress-update', data);
+      }
+    });
+
+    ipcMain.on('close-window', () => {
+      if (this.mainWindow && !this.mainWindow.isDestroyed()) this.mainWindow.close();
+      if (this.loadingWindow && !this.loadingWindow.isDestroyed()) this.loadingWindow.close();
+    });
+  }
+
+  public run() {
+    app.whenReady().then(() => {
+      this.createLoadingWindow();
+      this.simulateCompilationProgress();
+      this.setupIpc();
+    });
+
+    app.on('window-all-closed', () => {
+      if (process.platform !== 'darwin') app.quit();
+    });
+
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) this.createMainWindow();
+    });
+  }
 }
-
-function simulateCompilationProgress() {
-  const stages = [
-    { status: 'Initializing assistant...', progress: 10 },
-    { status: 'Loading modules...', progress: 30 },
-    { status: 'Starting server...', progress: 50 },
-    { status: 'Connecting APIs...', progress: 70 },
-    { status: 'Finalizing...', progress: 90 },
-    { status: 'Ready!', progress: 100 }
-  ];
-
-  let currentStage = 0;
-
-  const interval = setInterval(() => {
-    if (currentStage < stages.length && loadingWindow) {
-      loadingWindow.webContents.send('progress-update', stages[currentStage]);
-      currentStage++;
-    } else {
-      clearInterval(interval);
-      createMainWindow();
-    }
-  }, 800);
-}
-
-app.whenReady().then(() => {
-  createLoadingWindow();
-  simulateCompilationProgress();
-
-  ipcMain.on('progress-update', (event, data) => {
-    if (loadingWindow && !loadingWindow.isDestroyed()) {
-      loadingWindow.webContents.send('progress-update', data);
-    }
-  });
-
-  ipcMain.on('close-window', () => {
-    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.close();
-    if (loadingWindow && !loadingWindow.isDestroyed()) loadingWindow.close();
-  });
-});
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
-
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
-});
