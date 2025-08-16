@@ -5,7 +5,7 @@ import { User } from "./domains/models/User";
 import { Command } from "./domains/models/Command";
 import {  GeminiProvider } from "./infrastructures/llm/GeminiProvider";
 import {  FetchHttpClient } from "./infrastructures/http/FetchHttpClient";
-import type { IUserIO } from "./interfaces/cli/IUserIO";
+import type { IUserIO } from "./interfaces/cli/ICLIUserIO";
 import { ConsoleIO } from "./interfaces/cli/ConsoleIO";
 import type { IHttpClient } from "./domains/interfaces/IHTTPClient";
 import { App } from "./interfaces/cli/AppCLI";

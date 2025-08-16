@@ -4,13 +4,13 @@ import type { MessageFacade } from "../../application/MessageFacade";
 import type { Command } from "../../domains/models/Command";
 import { Message } from "../../domains/models/Message";
 import type { User } from "../../domains/models/User";
-import type { IUserIO } from "./IUserIO";
+import type { ICLIUserIO } from "./ICLIUserIO";
 
 export class App {
     constructor(
         private readonly messageFacade: MessageFacade,
         private readonly executorFacadeFactory: (command: Command) => ExecutorFacade,
-        private readonly userIO: IUserIO,
+        private readonly userIO: ICLIUserIO,
         private readonly user: User
     ) {}
 

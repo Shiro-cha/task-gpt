@@ -1,4 +1,4 @@
-import type { IUserIO } from "./IUserIO";
+import type { ICLIUserIO } from "./ICLIUserIO";
 
 // ANSI escape codes for colors and styling
 const COLORS = {
@@ -10,7 +10,7 @@ const COLORS = {
   bold: "\x1b[1m",
 };
 
-export class ConsoleIO implements IUserIO {
+export class ConsoleIO implements ICLIUserIO {
   async question(prompt: string): Promise<string> {
     const decoratedPrompt = `${COLORS.cyan}${COLORS.bold}❯${COLORS.reset} ${COLORS.magenta}${prompt}${COLORS.reset} `;
     process.stdout.write(decoratedPrompt);
