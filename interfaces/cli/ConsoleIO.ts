@@ -1,4 +1,4 @@
-import type { ICLIUserIO } from "./ICLIUserIO";
+import type { ICLIUserIO } from "../../domains/interfaces/ICLIUserIO";
 
 // ANSI escape codes for colors and styling
 const COLORS = {

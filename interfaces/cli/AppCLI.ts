@@ -4,7 +4,7 @@ import type { MessageFacade } from "../../application/MessageFacade";
 import type { Command } from "../../domains/models/Command";
 import { Message } from "../../domains/models/Message";
 import type { User } from "../../domains/models/User";
-import type { ICLIUserIO } from "./ICLIUserIO";
+import type { ICLIUserIO } from "../../domains/interfaces/ICLIUserIO";
 
 export class App {
     constructor(
