@@ -4,6 +4,8 @@ import type { IApp } from "../../domains/interfaces/IApp";
 import type { IUserIO } from "../../domains/interfaces/IUserIO";
 import type { Command } from "../../domains/models/Command";
 import type { User } from "../../domains/models/User";
+import { ElectronApp } from "./electron/main";
+
 
 export class AppDesktop implements IApp {
   constructor(
@@ -14,6 +16,7 @@ export class AppDesktop implements IApp {
   ) {}
 
   async run(): Promise<void> {
-    // Implementation for running the desktop application
+    const electronApp = new ElectronApp();
+    await electronApp.run();
   }
 }
