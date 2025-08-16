@@ -1,3 +1,5 @@
+import { ipcRenderer } from "electron";
+
 type Props = { onSend: (text: string) => void; inputRef: React.RefObject<HTMLInputElement> };
 
 export default function InputBar({ onSend, inputRef }: Props) {
