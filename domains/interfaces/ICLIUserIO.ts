@@ -1,5 +1,5 @@
-export interface ICLIUserIO {
-    question(prompt: string): Promise<string>;
-    print(message: string): void;
-    close(): void;
+import type { IUserIO } from "./IUserIO";
+
+export interface ICLIUserIO extends IUserIO {
+  question(prompt: string): Promise<string>;
 }
