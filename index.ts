@@ -8,7 +8,7 @@ import {  FetchHttpClient } from "./infrastructures/http/FetchHttpClient";
 import type { IUserIO } from "./domains/interfaces/IUserIO";
 import { ConsoleIO } from "./interfaces/cli/ConsoleIO";
 import type { IHttpClient } from "./domains/interfaces/IHTTPClient";
-import { App } from "./interfaces/cli/AppCLI";
+import { AppCLI } from "./interfaces/cli/AppCLI";
 
 
 
@@ -20,5 +20,5 @@ const executorFacadeFactory = (command: Command) => new ExecutorFacade(command);
 const userIO: IUserIO = new ConsoleIO();
 const user = new User("1", "Nomena", "nomena@gmail.com", new Date());
 
-const app = new App(messageFacade, executorFacadeFactory, userIO, user);
+const app = new AppCLI(messageFacade, executorFacadeFactory, userIO, user);
 await app.run();

@@ -5,8 +5,9 @@ import type { Command } from "../../domains/models/Command";
 import { Message } from "../../domains/models/Message";
 import type { User } from "../../domains/models/User";
 import type { IUserIO } from "../../domains/interfaces/IUserIO";
+import type { IApp } from "../../domains/interfaces/IApp";
 
-export class App {
+export class AppCLI implements IApp {
     constructor(
         private readonly messageFacade: MessageFacade,
         private readonly executorFacadeFactory: (command: Command) => ExecutorFacade,
