@@ -22,4 +22,7 @@ export class DesktopIO implements IUserIO {
     close(): void {
         this.window.webContents.send("bot:close");
     }
+    getBrowserWindow(): BrowserWindow {
+        return this.window;
+    }
 }
