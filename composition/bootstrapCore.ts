@@ -1,13 +1,11 @@
 import { ExecutorFacade } from "../application/ExecutorFacade";
 import { MessageFacade } from "../application/MessageFacade";
 import type { IHttpClient } from "../domains/interfaces/IHTTPClient";
-import type { IUserIO } from "../domains/interfaces/IUserIO";
 import type { Command } from "../domains/models/Command";
 import { User } from "../domains/models/User";
 import { appConfig } from "../infrastructures/config/appConfig";
 import { FetchHttpClient } from "../infrastructures/http/FetchHttpClient";
 import { GeminiProvider } from "../infrastructures/llm/GeminiProvider";
-import { ConsoleIO } from "../interfaces/cli/ConsoleIO";
 
 
 export type CoreDeps = {

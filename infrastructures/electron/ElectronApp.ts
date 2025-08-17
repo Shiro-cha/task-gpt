@@ -102,7 +102,7 @@ export class ElectronApp {
     });
   }
 
-  public run() {
+  private run() {
     app.whenReady().then(() => {
       this.createLoadingWindow();
       this.simulateCompilationProgress();
@@ -116,5 +116,11 @@ export class ElectronApp {
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) this.createMainWindow();
     });
+  }
+
+  public onReady(callback: (mainWindow: BrowserWindow | null) => void) {
+    this.run();
+    const mainWindow = this.mainWindow;
+    callback(mainWindow);
   }
 }
