@@ -1,5 +1,5 @@
 import { ipcMain, type BrowserWindow } from "electron";
-import type { IUserIO } from "../../../domains/interfaces/IUserIO";
+import type { IUserIO } from "../../domains/interfaces/IUserIO";
 
 export class DesktopIO implements IUserIO {
     constructor(private window: BrowserWindow) {}

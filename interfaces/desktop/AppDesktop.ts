@@ -5,8 +5,8 @@ import type { IApp } from "../../domains/interfaces/IApp";
 import type { IUserIO } from "../../domains/interfaces/IUserIO";
 import type { Command } from "../../domains/models/Command";
 import type { User } from "../../domains/models/User";
-import { ElectronApp } from "./electron/main";
-import { DesktopIO } from "./electron/DesktopIO";
+import { ElectronApp } from "./electron/ElectronApp";
+import { DesktopIO } from "./DesktopIO";
 
 
 export class AppDesktop implements IApp {
