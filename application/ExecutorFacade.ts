@@ -1,7 +1,10 @@
 import type { Command } from "../domains/models/Command";
 
 export class ExecutorFacade {
-	constructor(private readonly command: Command) {}
+	private readonly command;
+	constructor(command: Command) {
+		this.command = command;
+	}
 
 	async executeCommand() {
         
@@ -9,7 +12,7 @@ export class ExecutorFacade {
             throw new Error("No command provided");
         }
         const output = await ExecutorFacade.runSubProcess(this.command.task as string);
-        console.log(output);
+        return output;
     
 	}
 

@@ -1,11 +1,11 @@
-import { ExecutorFacade } from "../application/ExecutorFacade";
-import { MessageFacade } from "../application/MessageFacade";
-import type { IHttpClient } from "../domains/interfaces/IHTTPClient";
-import type { Command } from "../domains/models/Command";
-import { User } from "../domains/models/User";
-import { appConfig } from "../infrastructures/config/appConfig";
-import { FetchHttpClient } from "../infrastructures/http/FetchHttpClient";
-import { GeminiProvider } from "../infrastructures/llm/GeminiProvider";
+import { ExecutorFacade } from "../application/ExecutorFacade.ts";
+import { MessageFacade } from "../application/MessageFacade.ts";
+import type { IHttpClient } from "../domains/interfaces/IHTTPClient.ts";
+import type { Command } from "../domains/models/Command.ts";
+import { User } from "../domains/models/User.ts";
+import { appConfig } from "../infrastructures/config/appConfig.ts";
+import { FetchHttpClient } from "../infrastructures/http/FetchHttpClient.ts";
+import { GeminiProvider } from "../infrastructures/llm/GeminiProvider.ts";
 
 
 export type CoreDeps = {

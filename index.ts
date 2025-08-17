@@ -9,7 +9,7 @@ import type { IUserIO } from "./domains/interfaces/IUserIO";
 import { ConsoleIO } from "./interfaces/cli/ConsoleIO";
 import type { IHttpClient } from "./domains/interfaces/IHTTPClient";
 import { AppCLI } from "./interfaces/cli/AppCLI";
-import { DesktopIO } from "./interfaces/desktop/electron/DesktopIO";
+
 
 
 
@@ -19,7 +19,7 @@ const llmProvider: GeminiProvider = new GeminiProvider(appConfig.gemini.apiUrl, 
 const messageFacade: MessageFacade = new MessageFacade(undefined, llmProvider);
 const executorFacadeFactory = (command: Command) => new ExecutorFacade(command);
 const userIO: IUserIO = new ConsoleIO();
-//const userIO: IUserIO = new DesktopIO();
+
 const user = new User("1", "Nomena", "nomena@gmail.com", new Date());
 
 const app = new AppCLI(messageFacade, executorFacadeFactory, userIO, user);

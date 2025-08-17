@@ -1,4 +1,4 @@
-import { ipcMain, type BrowserWindow } from "electron";
+import {  type BrowserWindow } from "electron";
 import type { IUserIO } from "../../domains/interfaces/IUserIO";
 
 export class DesktopIO implements IUserIO {
@@ -6,8 +6,10 @@ export class DesktopIO implements IUserIO {
 
     question(prompt: string): Promise<string> {
         this.window.webContents.send("bot:question", prompt);
+        const {ipcMain} = require('electron');
         return new Promise((resolve) => {
             const handler = (_event: Electron.IpcMainEvent, input: string) => {
+                
                 ipcMain.removeListener("user:input", handler);
                 resolve(input);
             };

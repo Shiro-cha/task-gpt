@@ -1,5 +1,5 @@
-import { Command } from "../../domains/models/Command";
-import { GeminiResponseValidator } from "../../utils/GeminiResponseValidator";
+import { Command } from "../../domains/models/Command.ts";
+import { GeminiResponseValidator } from "../../utils/GeminiResponseValidator.ts";
 
 export class CommandFactory {
     static createFromGeminiResponse(response: string): Command | null {

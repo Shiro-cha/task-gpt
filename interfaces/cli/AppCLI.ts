@@ -40,7 +40,8 @@ export class AppCLI implements IApp {
                 const command = CommandFactory.createFromGeminiResponse(geminiResponse);
                 if (command) {
                     const executorFacade = this.executorFacadeFactory(command);
-                    await executorFacade.executeCommand();
+                    const commandResponse = await executorFacade.executeCommand();
+                    this.userIO.print(commandResponse);
                 } else {
                     this.userIO.print(geminiResponse);
                 }

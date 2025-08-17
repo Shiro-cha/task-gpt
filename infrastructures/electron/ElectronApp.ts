@@ -1,14 +1,21 @@
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
+const electron = require('electron');
+import type { BrowserWindow, IpcMain } from 'electron';
 import path from 'path';
+
+type Stage = { status: string; progress: number };
+
+const { app, BrowserWindow, ipcMain, screen } = electron;
 
 export class ElectronApp {
   private mainWindow: BrowserWindow | null = null;
   private loadingWindow: BrowserWindow | null = null;
   private readonly __dirname = path.resolve();
 
+  private ipc: IpcMain = ipcMain;
+
   constructor(private nextURL: string = 'http://localhost:3000') {}
 
-  private createLoadingWindow() {
+  private createLoadingWindow(): BrowserWindow {
     this.loadingWindow = new BrowserWindow({
       width: 400,
       height: 300,
@@ -31,9 +38,8 @@ export class ElectronApp {
     return this.loadingWindow;
   }
 
-  private createMainWindow() {
-    const { width: screenWidth, height: screenHeight } =
-      screen.getPrimaryDisplay().workAreaSize;
+  private createMainWindow(): BrowserWindow {
+    const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize;
     const winWidth = Math.round(screenWidth * 0.35);
     const winHeight = Math.round(screenHeight * 0.9);
 
@@ -57,18 +63,16 @@ export class ElectronApp {
     this.mainWindow.loadURL(this.nextURL);
 
     this.mainWindow.once('ready-to-show', () => {
-      if (this.loadingWindow) {
-        this.loadingWindow.close();
-        this.loadingWindow = null;
-      }
+      this.loadingWindow?.close();
+      this.loadingWindow = null;
       this.mainWindow?.show();
     });
 
     return this.mainWindow;
   }
 
-  private simulateCompilationProgress() {
-    const stages = [
+  private simulateCompilationProgress(): void {
+    const stages: Stage[] = [
       { status: 'Initializing assistant...', progress: 10 },
       { status: 'Loading modules...', progress: 30 },
       { status: 'Starting server...', progress: 50 },
@@ -89,38 +93,44 @@ export class ElectronApp {
     }, 800);
   }
 
-  private setupIpc() {
-    ipcMain.on('progress-update', (_event, data) => {
+  private setupIpc(): void {
+    this.ipc.on('progress-update', (_event, data: Stage) => {
       if (this.loadingWindow && !this.loadingWindow.isDestroyed()) {
         this.loadingWindow.webContents.send('progress-update', data);
       }
     });
 
-    ipcMain.on('close-window', () => {
-      if (this.mainWindow && !this.mainWindow.isDestroyed()) this.mainWindow.close();
-      if (this.loadingWindow && !this.loadingWindow.isDestroyed()) this.loadingWindow.close();
+    this.ipc.on('close-window', () => {
+      this.mainWindow?.close();
+      this.loadingWindow?.close();
     });
   }
 
-  private run() {
-    app.whenReady().then(() => {
-      this.createLoadingWindow();
-      this.simulateCompilationProgress();
-      this.setupIpc();
-    });
+  public run(onMainWindowReady?: (mainWindow: BrowserWindow) => void): void {
+  app.whenReady().then(() => {
+    this.createLoadingWindow();
+    this.simulateCompilationProgress();
+    this.setupIpc();
 
-    app.on('window-all-closed', () => {
-      if (process.platform !== 'darwin') app.quit();
-    });
+    // Après compilation simulée, on crée la fenêtre principale
+    const mainWindow = this.createMainWindow();
+    mainWindow.once('ready-to-show', () => {
+      this.loadingWindow?.close();
+      this.loadingWindow = null;
+      mainWindow.show();
 
-    app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) this.createMainWindow();
+      // On appelle le callback si fourni
+      if (onMainWindowReady) onMainWindowReady(mainWindow);
     });
-  }
+  });
 
-  public onReady(callback: (mainWindow: BrowserWindow | null) => void) {
-    this.run();
-    const mainWindow = this.mainWindow;
-    callback(mainWindow);
-  }
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit();
+  });
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) this.createMainWindow();
+  });
+}
+
 }
